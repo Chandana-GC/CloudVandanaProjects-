@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskTonic </title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+
+            color: #fff;
+        }
+
+        #todo-container {
+            width: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.37);
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        input {
+            width: 70%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            background: rgba(255, 255, 255, 0.4);
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.4);
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #ff6b6b;
+            color: white;
+            font-size: 20px;
+            margin: 5px;
+            transition: all 0.3s;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            background-color: #ff4757;
+            transform: scale(1.05);
+        }
+
+        .clear-btn {
+            background-color: #3498db;
+        }
+
+        .clear-btn:hover {
+            background-color: #2980b9;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+
+        li {
+            background: rgba(255, 255, 255, 0.1);
+            margin: 8px 0;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 8px;
+            transition: all 0.3s;
+            color: #fff;
+        }
+
+        li.completed {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
+        li:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .delete-btn, .edit-btn {
+            background-color: #ff4757;
+            color: white;
+            border: none;
+            padding: 7px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-left: 5px;
+        }
+
+        .edit-btn {
+            background-color: #f39c12;
+        }
+
+        .delete-btn:hover, .edit-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .task-counter {
+            margin-top: 10px;
+            font-size: 1.2em;
+            color: #fff;
+            opacity: 0.8;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 1em;
+            color: #fff;
+            opacity: 0.8;
+        }
+
+        footer:hover {
+            opacity: 1;
+            text-shadow: 0 0 8px #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="todo-container">
+        <h2>TaskTonic  To-Do List 📝</h2>
+        <input type="text" id="taskInput" placeholder="Enter a new task...">
+        <button onclick="addTask()">Add</button>
+        <button class="clear-btn" onclick="clearTasks()">Clear All</button>
+        <div class="task-counter">Total Tasks: <span id="taskCount">0</span></div>
+        <ul id="taskList"></ul>
+    </div>
+
+    <footer>
+        © 2025 || CHANDANA G C || All rights reserved.
+    </footer>
+
+    <script>
+        function updateTaskCount() {
+            const taskList = document.getElementById("taskList");
+            const count = taskList.getElementsByTagName("li").length;
+            document.getElementById("taskCount").textContent = count;
+        }
+
+        function addTask() {
+            const taskInput = document.getElementById("taskInput");
+            const taskText = taskInput.value.trim();
+
+            if (taskText === "") {
+                alert("Please enter a task!");
+                return;
+            }
+
+            const li = document.createElement("li");
+            li.textContent = taskText;
+
+            li.onclick = function () {
+                li.classList.toggle("completed");
+            };
+
+            const editButton = document.createElement("button");
+            editButton.textContent = "Edit";
+            editButton.classList.add("edit-btn");
+            editButton.onclick = function (e) {
+                e.stopPropagation();
+                const newTask = prompt("Edit your task:", taskText);
+                if (newTask) {
+                    li.firstChild.textContent = newTask;
+                }
+            };
+
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "X";
+            deleteButton.classList.add("delete-btn");
+            deleteButton.onclick = function (e) {
+                e.stopPropagation();
+                li.remove();
+                updateTaskCount();
+            };
+
+            li.appendChild(editButton);
+            li.appendChild(deleteButton);
+            document.getElementById("taskList").appendChild(li);
+
+            taskInput.value = "";
+            updateTaskCount();
+        }
+
+        function clearTasks() {
+            const taskList = document.getElementById("taskList");
+            taskList.innerHTML = "";
+            updateTaskCount();
+        }
+    </script>
+
+</body>
+</html>
